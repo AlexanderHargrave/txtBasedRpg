@@ -113,7 +113,18 @@ class Hero(Base):
         self.change_level(1)
         print("You have leveled up!")
         self.status_screen()
-        self.use_status_points()
+        ask = False
+        use_status_p = input("Would you like to use your Status Points(y/n): ")
+        while not ask:
+            if use_status_p == "y":
+                self.use_status_points()
+                ask = True
+            elif use_status_p == "n":
+                ask = True
+                pass
+            else:
+                use_status_p = input("Would you like to use your Status Points(y/n): ")
+
 
 
     def status_screen(self):
@@ -175,10 +186,15 @@ class Hero(Base):
 
         self.change_status_points(-current_status_points)
         self.change_max_hp(3 * hp_status_ask)
-        self.change_current_atk(atk_status_ask)
+        self.change_atk(atk_status_ask)
         self.change_defence(def_status_ask)
         self.change_speed(speed_status_ask)
+        self.after_change()
         self.status_screen()
+
+    def after_change(self):
+        self.change_hp(self.get_max_hp()-self.get_hp())
+        self.change_current_atk((self.get_atk()-self.get_current_atk()))
 
 
 User = Hero("Human", 1, 10, 10, 3, 3, 2, 5, "Hero", 0, 50, 0, 95, 0)
