@@ -36,6 +36,26 @@ class Base:
     def get_speed(self):
         return self.speed
 
+    def set_hp(self, hp_set):
+        self.hp = hp_set
+        self.max_hp = hp_set
+
+    def set_attack(self, atk_set):
+        self.atk = atk_set
+        self.current_atk = atk_set
+
+    def set_defence(self, def_set):
+        self.defence = def_set
+
+    def set_speed(self, speed_set):
+        self.speed = speed_set
+
+    def set_stats(self, hp, atk, defence, speed):
+        self.set_hp(hp)
+        self.set_attack(atk)
+        self.set_defence(defence)
+        self.set_speed(speed)
+
     def change_level(self, lvl_change):
         self.level += lvl_change
 
@@ -193,9 +213,29 @@ class Hero(Base):
         self.status_screen()
 
     def after_change(self):
-        self.change_hp(self.get_max_hp()-self.get_hp())
-        self.change_current_atk((self.get_atk()-self.get_current_atk()))
+        self.set_hp(self.get_max_hp())
+        self.set_attack(self.get_atk())
+
+class Monster(Base):
+    def __init__(self, species, level, hp, max_hp, atk, current_atk, defence,
+                 speed):
+        Base.__init__(self, species, level, hp, max_hp, atk, current_atk, defence, speed)
+
+    def stats_calcs(self):
+        lvl = self.get_level()
+        species = self.get_species()
+        hp_random = randint(1, 6)
+        atk_random = randint(1, 6)
+        if species == "Goblin":
+            self.set_stats(round(3 * lvl * (1+(hp_random-3)/10)), round(lvl * (1+(atk_random-3)/10)), 0, round(0.5*lvl))
+        elif species == "Slime":
+            self.set_stats(round(5 * lvl * (1+(hp_random-3)/10)), round(0.5 * lvl * (1+(atk_random-3)/10)), 1, 0)
+        elif species == "Kobold":
+            self.set_stats(round(2 * lvl * (1+(hp_random-3)/10)),
+                           round(0.75 * lvl * (1+(atk_random-3)/10)), round(0.5 * lvl), round(2 * lvl))
+        elif species == "Golem":
+            self.set_stats(round(5 * lvl * (1+(hp_random-3)/10)),
+                           round(0.25*lvl * (1+(atk_random-3)/10)), round(1.2 * lvl), round(0.2 * lvl))
 
 
 User = Hero("Human", 1, 10, 10, 3, 3, 2, 5, "Hero", 0, 50, 0, 95, 0)
-User.level_up()
