@@ -236,6 +236,9 @@ class Monster(Base):
         elif species == "Golem":
             self.set_stats(round(5 * lvl * (1+(hp_random-3)/10)),
                            round(0.25*lvl * (1+(atk_random-3)/10)), round(1.2 * lvl), round(0.2 * lvl))
+        elif species == "Shroom":
+            self.set_stats(round(2 * lvl * (1 + (hp_random - 3) / 10)),
+                           round(0.5 * lvl * (1 + (atk_random - 3) / 10)), round(2 * lvl), round(0.5 * lvl))
 
 
 User = Hero("Human", 1, 10, 10, 3, 3, 2, 5, "Hero", 0, 50, 0, 95, 0)
